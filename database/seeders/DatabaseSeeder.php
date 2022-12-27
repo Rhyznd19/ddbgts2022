@@ -21,6 +21,14 @@ class DatabaseSeeder extends Seeder
 
         // User::factory(3)->create();
 
+        User::create([
+            'name' => 'Admin',
+            'username' => 'Admin',
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('12345678'),
+            'is_admin' => 1
+        ]);
+
         Rumpun::create([
             'name' => 'Saintek',
             'slug' => 'saintek'
@@ -45,7 +53,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Gagal',
             'slug' => 'gagal'
         ]);
-        
+
 
         // Post::factory(20)->create();
     }

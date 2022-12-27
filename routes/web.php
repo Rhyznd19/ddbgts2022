@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('home', [
-        "title" => "DDBGTS 2022",
+        "title" => "DDBGTS 2023",
         'active' => 'home',
     ]);
 });

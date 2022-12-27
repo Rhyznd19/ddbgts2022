@@ -23,7 +23,7 @@ class CreatePesertasTable extends Migration
             $table->string('password_tm')->nullable();
             $table->string('nomor_wa')->unique();
             $table->string('asal_sekolah');
-            $table->foreignId('rumpun_id');
+            $table->foreignId('rumpun_id')->nullable();
             $table->string('bukti_tf')->nullable();
             $table->foreignId('status_id')->default('1');
             $table->string('verified_by')->nullable();

@@ -16,7 +16,7 @@
 
             <!--img---->
             <div class="blog-img">
-                <img src="{{ $post->image }}" alt="blog">
+                <img src="{{ asset('storage/' . $post->image) }}" alt="blog">
             </div>
 
             <!--text--->

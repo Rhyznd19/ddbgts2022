@@ -42,7 +42,7 @@ class DashboardPostController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         $validatedData = $request->validate([
             'title' => 'required|max:255',
             'slug' => 'required|unique:posts',
@@ -50,16 +50,19 @@ class DashboardPostController extends Controller
             'body' => 'required'
         ]);
 
+        // if($request->file('image')){
+        //     $path = $request->file('image')->store('post_image', 's3');
+        // }
         if($request->file('image')){
-            $path = $request->file('image')->store('post_image', 's3');
+            $validatedData['image'] = $request->file('image')->store('post_image');
         }
 
         $validatedData['user_id'] = auth()->user()->id;
         $validatedData['excerpt'] = Str::limit(strip_tags($request->body), 200);
-        $path = Storage::disk('s3')->url($path);
+        // $path = Storage::disk('s3')->url($path);
 
-        $validatedData['image'] = $path;
-        $validatedData['image_id'] = basename($path);
+        // $validatedData['image'] = $path;
+        // $validatedData['image_id'] = basename($path);
 
         Post::create($validatedData);
 
@@ -119,17 +122,23 @@ class DashboardPostController extends Controller
         }
 
         $validatedData = $request->validate($rules);
-
+        
         if($request->file('image')){
             if($request->oldImage){
-                Storage::disk('s3')->delete('post_image/'.$post->image_id); 
+                Storage::delete($request->oldImage); 
             }
-
-            $path = $request->file('image')->store('post_image', 's3');
-            $path = Storage::disk('s3')->url($path);
-            $validatedData['image'] = $path;
-            $validatedData['image_id'] = basename($path);
+            $validatedData['image'] = $request->file('image')->store('post_image');
         }
+        // if($request->file('image')){
+        //     if($request->oldImage){
+        //         Storage::disk('s3')->delete('post_image/'.$post->image_id); 
+        //     }
+
+        //     $path = $request->file('image')->store('post_image', 's3');
+        //     $path = Storage::disk('s3')->url($path);
+        //     $validatedData['image'] = $path;
+        //     $validatedData['image_id'] = basename($path);
+        // }
 
         $validatedData['user_id'] = auth()->user()->id;
         $validatedData['excerpt'] = Str::limit(strip_tags($request->body), 200);
@@ -157,8 +166,11 @@ class DashboardPostController extends Controller
         //     abort(403);
         // }
 
+        // if($post->image){
+        //     Storage::disk('s3')->delete('post_image/'.$post->image_id); 
+        // }
         if($post->image){
-            Storage::disk('s3')->delete('post_image/'.$post->image_id); 
+            Storage::delete($post->image); 
         }
 
         Post::destroy($post->id);

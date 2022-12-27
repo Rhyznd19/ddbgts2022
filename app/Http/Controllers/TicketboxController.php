@@ -18,9 +18,7 @@ class TicketboxController extends Controller
      */
     public function index()
     {
-        return view('dashboard.ticketbox.index', [
-            'rumpuns' => Rumpun::all()
-        ]);
+        return view('dashboard.ticketbox.index');
     }
 
     /**

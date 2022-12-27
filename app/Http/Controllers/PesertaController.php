@@ -96,9 +96,13 @@ class PesertaController extends Controller
         $peserta->update($validatedData);
 
         if($validatedData['status_id'] == 2){
-            Storage::disk('s3')->delete('bukti_tf/'.$peserta->image_id); 
+            // Storage::disk('s3')->delete('bukti_tf/'.$peserta->image_id); 
+            if($peserta->bukti_tf){
+                Storage::delete($peserta->bukti_tf); 
+            }
             Mail::to($peserta->email)->send(new KonfirmasiEMail($peserta, "Pendaftaran DDBGTS Berhasil", "Selamat, pendaftaran Anda telah berhasil dilakukan. Silahkan klik tombol di bawah ini untuk bergabung dengan grup WhatsApp DDBGTS 2022", "Join Group Whatsapp", "https://chat.whatsapp.com/KFb3FiURRmCLDzvLgqdKjs"));
         }else{
+            Storage::delete($peserta->bukti_tf); 
             Mail::to($peserta->email)->send(new KonfirmasiEMail($peserta, "Pendaftaran DDBGTS Gagal", "Mohon maaf, pendaftaran Anda belum berhasil dilakukan. Mohon melakukan pendaftaran ulang", "Daftar Ulang", "https://ddbgts.com/daftar"));
         }
 
